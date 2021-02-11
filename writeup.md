@@ -93,5 +93,7 @@ from different sensors would produce a more accurate and confident post probabil
 in Bayesian sense.
 
 Images of both trials are shown below:
-![RMSE Radar](./img/rmse-radar.png "Radar RMSE")
-![RMSE Lidar](./img/rmse-lidar.png "Lidar RMSE")
+* Radar RMSE
+  ![RMSE Radar](./img/rmse-radar.png "Radar RMSE")
+* Lidar RMSE
+  ![RMSE Lidar](./img/rmse-lidar.png "Lidar RMSE")
