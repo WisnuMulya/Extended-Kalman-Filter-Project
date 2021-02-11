@@ -108,7 +108,8 @@ int main() {
           ground_truth.push_back(gt_values);
           
           // Call ProcessMeasurement(meas_package) for Kalman filter
-          fusionEKF.ProcessMeasurement(meas_package);       
+          fusionEKF.ProcessMeasurement(meas_package);
+
 
           // Push the current estimated x,y positon from the Kalman filter's 
           //   state vector
