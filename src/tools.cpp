@@ -23,14 +23,14 @@ VectorXd Tools::CalculateRMSE(const vector<VectorXd> &estimations,
   }
   
   // accumulate squared residuals
-  for (int i=0; i<estimations.size(); ++i) {
-    VectorXd res = estimations[i]-ground_truth[i];
+  for (int i = 0; i < estimations.size(); ++i) {
+    VectorXd res = estimations[i] - ground_truth[i];
     res = res.array()*res.array();
     rmse += res;
   }
 
   // calculate the mean
-  rmse /= estimations.size();
+  rmse = rmse / estimations.size();
 
   // calculate the squared root
   rmse = rmse.array().sqrt();
@@ -48,20 +48,22 @@ MatrixXd Tools::CalculateJacobian(const VectorXd& x_state) {
   float py = x_state(1);
   float vx = x_state(2);
   float vy = x_state(3);
-
+  
+  // compute the Jacobian matrix
+  float px2py2 = pow(px, 2) + pow(py, 2);
+  float px2py2_12 = sqrt(px2py2);
+  float px2py2_32 = pow(px2py2, 3/2);
+  
   // check division by zero
-  if ((px==0) || (py==0)) {
+  if (fabs(px2py2) < 0.0001) {
     std::cout << "CalculateJacobian() - Error - Division by Zero";
     return Hj;
   }
   
-  // compute the Jacobian matrix
-  float px2py2 = pow(px, 2) + pow(py, 2);
-  float sqrt_px2py2 = sqrt(px2py2);
-  float sqrt_cube_px2py2 = pow(px2py2, 3/2);
-  Hj << px/sqrt_px2py2, py/sqrt_px2py2, 0, 0,
-        -py/px2py2, px/px2py2, 0, 0,
-        py*(vx*py-vy*px)/sqrt_cube_px2py2, px*(vy*px-vx*py)/sqrt_cube_px2py2, px/sqrt_px2py2, py/sqrt_px2py2;
+  Hj << px / px2py2_12, py / px2py2_12, 0, 0,
+        -py / px2py2, px / px2py2, 0, 0,
+        py * (vx * py - vy * px) / px2py2_32, px * (vy * px - vx * py) / px2py2_32,
+        px / px2py2_12, py / px2py2_12;
 
   return Hj;
 }
